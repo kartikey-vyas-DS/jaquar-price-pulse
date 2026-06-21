@@ -1,0 +1,13 @@
+jaquar_price_pulse:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('PGHOST') }}"
+      user: "{{ env_var('PGUSER') }}"
+      password: "{{ env_var('PGPASSWORD') }}"
+      port: "{{ env_var('PGPORT') | int }}"
+      dbname: "{{ env_var('PGDATABASE') }}"
+      schema: dbt
+      threads: 4
+      sslmode: require

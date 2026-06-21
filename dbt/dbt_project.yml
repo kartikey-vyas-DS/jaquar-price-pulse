@@ -1,0 +1,16 @@
+name: jaquar_price_pulse
+version: "1.0.0"
+config-version: 2
+
+profile: jaquar_price_pulse
+
+model-paths: ["models"]
+
+models:
+  jaquar_price_pulse:
+    staging:
+      +schema: staging
+      +materialized: view
+    marts:
+      +schema: mart
+      +materialized: table
