@@ -2,6 +2,10 @@
 
 Serverless data engineering project for tracking historical Jaquar faucet prices from a curated watchlist, modeling price movements, and exposing alert-ready changes through a REST API and dashboard.
 
+<p align="center">
+  <img src="docs/assets/dashboard-preview.svg" alt="Jaquar Price Pulse dashboard preview" width="100%">
+</p>
+
 ## Capabilities
 
 - Python extraction from a real product source
@@ -125,6 +129,10 @@ Adds previous snapshot price, absolute price change, and percentage movement usi
 Filters `price_history` to rows where movement exceeds the SKU-specific threshold.
 
 ## AWS Architecture
+
+<p align="center">
+  <img src="docs/assets/aws-architecture.svg" alt="Jaquar Price Pulse AWS architecture" width="100%">
+</p>
 
 ```mermaid
 flowchart LR
