@@ -152,7 +152,3 @@ flowchart LR
 - S3 Gateway VPC endpoint avoids NAT Gateway cost for S3 access from VPC Lambdas.
 - No NAT Gateway, no RDS Proxy, no paid dashboards.
 - EventBridge Scheduler triggers one low-volume Step Functions workflow per day.
-
-## Portfolio Talking Point
-
-Built an end-to-end AWS serverless data pipeline using S3, Lambda, RDS/PostgreSQL, Step Functions, EventBridge Scheduler, API Gateway, Python, and SQL/dbt-style modeling to ingest Jaquar product price watchlists, load historical snapshots, calculate price deltas with window functions, validate data quality, and serve alert-ready price changes through a REST endpoint and dashboard.
