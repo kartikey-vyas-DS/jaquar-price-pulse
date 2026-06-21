@@ -2,7 +2,7 @@
 
 Serverless data engineering project for tracking historical Jaquar faucet prices from a curated watchlist, modeling price movements, and exposing alert-ready changes through a REST API and dashboard.
 
-## What This Proves
+## Capabilities
 
 - Python extraction from a real product source
 - S3 raw/seed landing
@@ -152,3 +152,4 @@ flowchart LR
 - S3 Gateway VPC endpoint avoids NAT Gateway cost for S3 access from VPC Lambdas.
 - No NAT Gateway, no RDS Proxy, no paid dashboards.
 - EventBridge Scheduler triggers one low-volume Step Functions workflow per day.
+

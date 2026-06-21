@@ -25,6 +25,7 @@ flowchart LR
 5. Load that snapshot into `raw.price_snapshots` with `is_synthetic = false`.
 6. Run the existing transform Lambda unchanged.
 
-## Why This Is A Good Interview Story
+## Why This Matters
 
-The current version proves cloud orchestration, storage, modeling, testing, and API delivery. The live-scrape upgrade proves production ingestion and idempotent daily snapshotting.
+The current version covers cloud orchestration, storage, modeling, testing, and API delivery. The live-scrape upgrade adds production ingestion and idempotent daily snapshotting.
+
