@@ -21,9 +21,9 @@ Jaquar Price Pulse is a serverless data engineering project for tracking faucet 
 
 ## Live Dashboard
 
-```text
-https://kartikey-vyas-ds.github.io/jaquar-price-pulse/dashboard/
-```
+<p>
+  <a href="https://kartikey-vyas-ds.github.io/jaquar-price-pulse/dashboard/"><strong>Open Live Dashboard</strong></a>
+</p>
 
 ## Live Demo API
 
