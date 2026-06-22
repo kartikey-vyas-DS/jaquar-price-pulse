@@ -133,7 +133,7 @@ def post_with_retry(session: requests.Session, url: str, **kwargs) -> requests.R
 
 def get_soup(session: requests.Session, url: str) -> BeautifulSoup:
     response = get_with_retry(session, url)
-    return BeautifulSoup(response.text, "lxml")
+    return BeautifulSoup(response.text, "html.parser")
 
 
 def product_id_from_url(url: str) -> str:
@@ -536,3 +536,4 @@ def lambda_handler(event, context):
         "failed_rows": failed,
         "raw_key": raw_key,
     }
+
