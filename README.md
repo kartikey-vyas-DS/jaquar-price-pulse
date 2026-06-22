@@ -2,7 +2,7 @@
 
 Jaquar products are sold across dozens of regional distributors. Prices shift weekly with no centralised visibility; a procurement team checking 50 SKUs manually takes hours. This pipeline automates that workflow with scheduled snapshots, automatic change detection, and an alert API that flags what moved and by how much.
 
-Serverless data engineering project for tracking Jaquar faucet prices from a curated watchlist, modeling price movements, and exposing alert-ready changes through a REST API and dashboard.
+Jaquar Price Pulse is a serverless data engineering project for tracking faucet prices from a curated watchlist, modeling price movements, and exposing alert-ready changes through a REST API and dashboard.
 
 <p align="center">
   <img src="docs/assets/dashboard-preview.svg" alt="Jaquar Price Pulse dashboard preview" width="100%">
@@ -50,25 +50,13 @@ The production flow is designed to append live Jaquar snapshots instead of repea
 
 1. EventBridge Scheduler runs daily.
 2. Step Functions starts `jpp-price-pipeline`.
-3. `jpp-scrape-jaquar-prices` reads the active watchlist from S3, calls Jaquar product pages and the internal variant endpoint, writes a dated raw CSV to S3, and upserts `is_synthetic = false` rows into `raw.price_snapshots`.
-4. `jpp-transform-prices` rebuilds staging views and mart tables in PostgreSQL.
-5. API Gateway serves `mart.price_change_alerts` through `jpp-price-changes-api`.
-6. `dashboard/index.html` fetches the API and visualizes the latest alert set.
+3. `jpp-scrape-jaquar-prices` reads the active watchlist from S3, calls Jaquar product pages and the internal variant endpoint, and writes a dated raw CSV to S3.
+4. `jpp-load-raw-snapshot` reads that raw CSV from S3 and appends `is_synthetic = false` rows into `raw.price_snapshots`.
+5. `jpp-transform-prices` rebuilds staging views and mart tables in PostgreSQL.
+6. API Gateway serves `mart.price_change_alerts` through `jpp-price-changes-api`.
+7. `dashboard/index.html` fetches the API and visualizes the latest alert set.
 
 ## Local Setup
-
-Create `.env` in this folder:
-
-```env
-AWS_REGION=ap-south-1
-S3_BUCKET=jaquar-price-pulse-kvs-20260621
-
-PGHOST=jaquar-price-pulse-db.c962wgiycsyj.ap-south-1.rds.amazonaws.com
-PGPORT=5432
-PGDATABASE=jaquar_price_pulse
-PGUSER=jppadmin
-PGPASSWORD=put-your-password-here
-```
 
 Install dependencies:
 
@@ -78,7 +66,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Check DB connectivity:
+Configure local environment variables for PostgreSQL and S3 before running the bootstrap scripts. Then check DB connectivity:
 
 ```bash
 python scripts/check_connection.py
@@ -116,6 +104,12 @@ Package the live scrape Lambda:
 .\scripts\package_scrape_jaquar_lambda.ps1 -Python .\.venv\Scripts\python.exe
 ```
 
+Package the raw snapshot loader Lambda:
+
+```powershell
+.\scripts\package_load_raw_snapshot_lambda.ps1 -Python .\.venv\Scripts\python.exe
+```
+
 
 ## Tables
 
@@ -147,7 +141,9 @@ flowchart LR
   B --> C["Lambda: jpp-scrape-jaquar-prices"]
   D["S3: watchlist CSV"] --> C
   C --> N["S3: dated raw snapshot"]
-  C --> E["RDS PostgreSQL: raw.price_snapshots"]
+  B --> O["Lambda: jpp-load-raw-snapshot"]
+  N --> O
+  O --> E["RDS PostgreSQL: raw.price_snapshots"]
   B --> F["Lambda: jpp-transform-prices"]
   E --> F
   F --> G["staging views"]

@@ -4,10 +4,10 @@
 
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
-$LambdaDir = Join-Path $ProjectRoot "lambdas\scrape_jaquar_prices"
+$LambdaDir = Join-Path $ProjectRoot "lambdas\load_raw_snapshot"
 $BuildRoot = Join-Path $ProjectRoot "build"
-$BuildDir = Join-Path $BuildRoot "scrape_jaquar_prices"
-$ZipPath = Join-Path $BuildRoot "scrape_jaquar_prices_lambda.zip"
+$BuildDir = Join-Path $BuildRoot "load_raw_snapshot"
+$ZipPath = Join-Path $BuildRoot "load_raw_snapshot_lambda.zip"
 
 New-Item -ItemType Directory -Force -Path $BuildRoot | Out-Null
 if (Test-Path $BuildDir) { Remove-Item $BuildDir -Recurse -Force }

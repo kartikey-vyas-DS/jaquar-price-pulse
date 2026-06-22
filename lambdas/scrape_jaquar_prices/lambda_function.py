@@ -437,11 +437,14 @@ def lambda_handler(event, context):
     matched = 0
     failed = 0
 
-    conn = connect()
+    write_to_rds = os.environ.get("WRITE_TO_RDS", "false").strip().lower() in {"1", "true", "yes"}
+    conn = connect() if write_to_rds else None
     try:
-        cur = conn.cursor()
-        ensure_schema(cur)
-        upsert_watchlist(cur, watchlist)
+        cur = None
+        if conn is not None:
+            cur = conn.cursor()
+            ensure_schema(cur)
+            upsert_watchlist(cur, watchlist)
 
         for product_url, watches in grouped.items():
             time.sleep(DELAY_PRODUCTS)
@@ -470,7 +473,8 @@ def lambda_handler(event, context):
                         )
                         continue
 
-                    upsert_snapshot(cur, snapshot_date, run_id, watch, variant)
+                    if cur is not None:
+                        upsert_snapshot(cur, snapshot_date, run_id, watch, variant)
                     matched += 1
                     raw_rows.append(
                         {
@@ -508,12 +512,15 @@ def lambda_handler(event, context):
                         }
                     )
 
-        conn.commit()
+        if conn is not None:
+            conn.commit()
     except Exception:
-        conn.rollback()
+        if conn is not None:
+            conn.rollback()
         raise
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
 
     raw_key = f"raw/jaquar/snapshot_date={snapshot_date}/{run_id}.csv"
     write_raw_snapshot_to_s3(s3, bucket, raw_key, raw_rows)
@@ -536,4 +543,5 @@ def lambda_handler(event, context):
         "failed_rows": failed,
         "raw_key": raw_key,
     }
+
 

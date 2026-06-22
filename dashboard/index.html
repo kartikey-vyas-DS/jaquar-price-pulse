@@ -6,7 +6,7 @@
   <title>Jaquar Price Pulse Dashboard</title>
   <style>
     :root {
-      --bg: #f6f8fb;
+      --bg: #f5f7fa;
       --panel: #ffffff;
       --ink: #1d2433;
       --muted: #697386;
@@ -16,31 +16,33 @@
       --warn: #b45309;
       --danger: #b42318;
       --good: #138a36;
-      --shadow: 0 12px 32px rgba(29, 36, 51, 0.08);
+      --shadow: 0 12px 30px rgba(29, 36, 51, 0.08);
     }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.45; }
-    header { background: linear-gradient(135deg, #ffffff 0%, #e7f5f2 100%); border-bottom: 1px solid var(--line); }
-    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
-    .hero { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; padding: 34px 0 28px; align-items: end; }
-    h1 { margin: 0 0 8px; font-size: clamp(30px, 4vw, 48px); line-height: 1.05; letter-spacing: 0; }
+    header { background: radial-gradient(circle at 86% 12%, rgba(5, 122, 111, 0.14), transparent 30%), linear-gradient(180deg, #ffffff 0%, #f0f6f7 100%); border-bottom: 1px solid var(--line); }
+    .wrap { width: min(1240px, calc(100% - 32px)); margin: 0 auto; }
+    .hero { display: grid; grid-template-columns: 1.35fr 0.9fr; gap: 24px; padding: 34px 0 28px; align-items: end; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--accent); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+    h1 { margin: 0 0 10px; font-size: clamp(34px, 5vw, 58px); line-height: 1.02; letter-spacing: 0; }
     .subhead { margin: 0; max-width: 720px; color: var(--muted); font-size: 16px; }
-    .status { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+    .status { display: grid; gap: 9px; justify-content: stretch; background: rgba(255, 255, 255, 0.82); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 16px; }
+    .status-title { margin: 0 0 2px; font-size: 15px; font-weight: 850; }
     .pill { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.72); padding: 8px 12px; color: var(--muted); font-size: 13px; white-space: nowrap; }
     .dot { width: 9px; height: 9px; border-radius: 999px; background: var(--good); box-shadow: 0 0 0 4px rgba(19, 138, 54, 0.12); }
     main { padding: 24px 0 44px; }
-    .toolbar { display: grid; grid-template-columns: 1fr 110px 110px 110px auto; gap: 12px; margin-bottom: 18px; align-items: end; }
-    label { display: grid; gap: 6px; color: var(--muted); font-size: 12px; font-weight: 650; }
-    input { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; color: var(--ink); background: #fff; font: inherit; }
-    button { border: 0; border-radius: 8px; padding: 12px 16px; background: var(--accent); color: #fff; font-weight: 750; cursor: pointer; box-shadow: 0 8px 18px rgba(5, 122, 111, 0.18); }
+    .toolbar { display: grid; grid-template-columns: 1fr 98px 98px 98px auto; gap: 12px; margin-bottom: 18px; align-items: end; }
+    label { display: grid; gap: 6px; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; }
+    input { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 11px 12px; min-height: 44px; color: var(--ink); background: #fff; font: inherit; }
+    button { border: 0; border-radius: 8px; padding: 12px 18px; min-height: 44px; background: var(--accent); color: #fff; font-weight: 850; cursor: pointer; box-shadow: 0 10px 22px rgba(5, 122, 111, 0.16); }
     button:hover { background: #04655d; }
     .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
-    .kpi, .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
+    .kpi, .panel, .alert-card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
     .kpi { padding: 18px; min-height: 116px; }
-    .kpi span { display: block; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
-    .kpi strong { display: block; margin-top: 10px; font-size: 30px; line-height: 1; }
+    .kpi span { display: block; color: var(--muted); font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: 0.04em; }
+    .kpi strong { display: block; margin-top: 10px; font-size: 34px; line-height: 1; }
     .kpi small { display: block; margin-top: 10px; color: var(--muted); }
-    .grid { display: grid; grid-template-columns: 0.95fr 1.45fr; gap: 18px; align-items: start; }
+    .grid { display: grid; grid-template-columns: 0.9fr 1.3fr; gap: 18px; align-items: start; margin-bottom: 18px; }
     .panel { overflow: hidden; }
     .panel h2 { margin: 0; padding: 18px 18px 12px; font-size: 18px; }
     .chart { padding: 4px 18px 18px; display: grid; gap: 12px; }
@@ -48,6 +50,11 @@
     .bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
     .bar-track { height: 10px; border-radius: 999px; background: #e9eef5; overflow: hidden; }
     .bar { height: 100%; border-radius: inherit; background: var(--accent-2); min-width: 2px; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 4px 18px 18px; }
+    .alert-card { padding: 14px; box-shadow: none; }
+    .alert-card strong { display: block; min-height: 42px; font-size: 14px; line-height: 1.25; }
+    .alert-card .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; color: var(--muted); font-size: 12px; }
+    .alert-card .big-change { color: var(--danger); font-size: 24px; font-weight: 900; }
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; min-width: 900px; }
     th, td { text-align: left; padding: 12px 14px; border-top: 1px solid var(--line); vertical-align: top; font-size: 13px; }
@@ -59,26 +66,30 @@
     a:hover { text-decoration: underline; }
     .message { margin: 0 0 18px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--muted); }
     .message.error { border-color: #f3b4ae; background: #fff7f6; color: var(--danger); }
-    @media (max-width: 900px) { .hero, .grid, .toolbar, .kpis { grid-template-columns: 1fr; } .status { justify-content: flex-start; } }
+    @media (max-width: 900px) { .hero, .grid, .toolbar, .kpis, .cards { grid-template-columns: 1fr; } .status { justify-content: flex-start; } }
   </style>
 </head>
 <body>
-  <header><div class="wrap hero"><div><h1>Jaquar Price Pulse</h1><p class="subhead">A live AWS-backed dashboard for price-change alerts from a PostgreSQL mart, built from a Jaquar faucet watchlist and historical snapshots.</p></div><div class="status"><span class="pill"><span class="dot"></span> API Gateway live</span><span class="pill">Step Functions scheduled daily</span><span class="pill">Synthetic history flagged</span></div></div></header>
+  <header><div class="wrap hero"><div><div class="eyebrow"><span class="dot"></span> Daily price intelligence</div><h1>Jaquar Price Pulse</h1><p class="subhead">Live price-change monitoring for a curated Jaquar faucet watchlist. The dashboard reads an API Gateway endpoint backed by PostgreSQL marts built from scheduled scrape snapshots.</p></div><div class="status"><p class="status-title">Pipeline path</p><span class="pill"><span class="dot"></span> Scrape Jaquar products</span><span class="pill">Load raw snapshot to RDS</span><span class="pill">Transform history and alerts</span></div></div></header>
   <main class="wrap">
     <form class="toolbar" id="filters"><label>API endpoint<input id="apiBase" value="https://g1csrs4cxh.execute-api.ap-south-1.amazonaws.com/price-changes" spellcheck="false"></label><label>Days<input id="days" type="number" min="1" max="365" value="14"></label><label>Limit<input id="limit" type="number" min="1" max="200" value="25"></label><label>Min %<input id="minPct" type="number" min="0" step="0.1" value="0"></label><button type="submit">Refresh</button></form>
     <p class="message" id="message">Loading latest alerts from API Gateway...</p>
     <section class="kpis"><div class="kpi"><span>Alerts Returned</span><strong id="kpiCount">-</strong><small>Rows from the current API response</small></div><div class="kpi"><span>Largest Movement</span><strong id="kpiMax">-</strong><small>Highest absolute percentage change</small></div><div class="kpi"><span>Latest Snapshot</span><strong id="kpiDate">-</strong><small>Most recent mart snapshot date</small></div><div class="kpi"><span>Priority 1</span><strong id="kpiPriority">-</strong><small>Most urgent watchlist items</small></div></section>
-    <section class="grid"><div class="panel"><h2>Series Movement</h2><div class="chart" id="seriesChart"></div></div><div class="panel"><h2>Latest Price Alerts</h2><div class="table-wrap"><table><thead><tr><th>Product</th><th>Series</th><th>Snapshot</th><th>Previous MRP</th><th>Current MRP</th><th>Change</th><th>Priority</th><th>Source</th></tr></thead><tbody id="alertRows"></tbody></table></div></div></section>
+    <section class="grid"><div class="panel"><h2>Series Movement</h2><div class="chart" id="seriesChart"></div></div><div class="panel"><h2>Highest Alerts</h2><div class="cards" id="topCards"></div></div></section>
+    <section class="panel"><h2>Latest Price Alerts</h2><div class="table-wrap"><table><thead><tr><th>Product</th><th>Series</th><th>Snapshot</th><th>Previous MRP</th><th>Current MRP</th><th>Change</th><th>Priority</th><th>Source</th></tr></thead><tbody id="alertRows"></tbody></table></div></section>
   </main>
   <script>
     const currency = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-    const els = { filters: document.querySelector("#filters"), apiBase: document.querySelector("#apiBase"), days: document.querySelector("#days"), limit: document.querySelector("#limit"), minPct: document.querySelector("#minPct"), message: document.querySelector("#message"), kpiCount: document.querySelector("#kpiCount"), kpiMax: document.querySelector("#kpiMax"), kpiDate: document.querySelector("#kpiDate"), kpiPriority: document.querySelector("#kpiPriority"), seriesChart: document.querySelector("#seriesChart"), alertRows: document.querySelector("#alertRows") };
+    const els = { filters: document.querySelector("#filters"), apiBase: document.querySelector("#apiBase"), days: document.querySelector("#days"), limit: document.querySelector("#limit"), minPct: document.querySelector("#minPct"), message: document.querySelector("#message"), kpiCount: document.querySelector("#kpiCount"), kpiMax: document.querySelector("#kpiMax"), kpiDate: document.querySelector("#kpiDate"), kpiPriority: document.querySelector("#kpiPriority"), seriesChart: document.querySelector("#seriesChart"), topCards: document.querySelector("#topCards"), alertRows: document.querySelector("#alertRows") };
+    function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" })[char]); }
+    function sortedRows(rows) { return [...rows].sort((a, b) => Math.abs(Number(b.pct_change_vs_previous_snapshot || 0)) - Math.abs(Number(a.pct_change_vs_previous_snapshot || 0))); }
     function buildUrl() { const url = new URL(els.apiBase.value.trim()); url.searchParams.set("days", els.days.value || "14"); url.searchParams.set("limit", els.limit.value || "25"); url.searchParams.set("min_pct", els.minPct.value || "0"); return url; }
     function setMessage(text, isError = false) { els.message.textContent = text; els.message.classList.toggle("error", isError); }
     function renderKpis(rows) { const max = rows.reduce((acc, row) => Math.max(acc, Math.abs(Number(row.pct_change_vs_previous_snapshot || 0))), 0); const latest = rows.map((row) => row.snapshot_date).sort().at(-1) || "-"; const priorityOne = rows.filter((row) => Number(row.priority) === 1).length; els.kpiCount.textContent = rows.length.toString(); els.kpiMax.textContent = rows.length ? `${max.toFixed(2)}%` : "-"; els.kpiDate.textContent = latest; els.kpiPriority.textContent = priorityOne.toString(); }
-    function renderSeriesChart(rows) { const totals = rows.reduce((acc, row) => { const series = row.series || "Unknown"; acc[series] = (acc[series] || 0) + Math.abs(Number(row.pct_change_vs_previous_snapshot || 0)); return acc; }, {}); const entries = Object.entries(totals).sort((a, b) => b[1] - a[1]).slice(0, 8); const max = entries.reduce((acc, [, value]) => Math.max(acc, value), 0) || 1; els.seriesChart.innerHTML = entries.length ? entries.map(([series, value]) => `<div class="bar-row"><span class="bar-label" title="${series}">${series}</span><span class="bar-track"><span class="bar" style="width:${Math.max(4, (value / max) * 100)}%"></span></span><strong>${value.toFixed(1)}%</strong></div>`).join("") : "<p class=\"message\">No series data returned for these filters.</p>"; }
-    function renderRows(rows) { els.alertRows.innerHTML = rows.map((row) => `<tr><td><strong>${row.product_name || "-"}</strong><span>${row.product_code || ""}</span></td><td>${row.series || "-"}</td><td>${row.snapshot_date || "-"}</td><td>${currency.format(Number(row.previous_mrp || 0))}</td><td>${currency.format(Number(row.mrp || 0))}</td><td class="change">${Number(row.pct_change_vs_previous_snapshot || 0).toFixed(2)}%</td><td><span class="priority">${row.priority || "-"}</span></td><td><a href="${row.source_url}" target="_blank" rel="noreferrer">Open</a></td></tr>`).join(""); }
-    async function load() { setMessage("Loading latest alerts from API Gateway..."); try { const response = await fetch(buildUrl()); if (!response.ok) throw new Error(`API returned HTTP ${response.status}`); const payload = await response.json(); const rows = payload.results || []; renderKpis(rows); renderSeriesChart(rows); renderRows(rows); setMessage(`Loaded ${rows.length} alerts. Filters: ${payload.filters.days} days, limit ${payload.filters.limit}, min ${payload.filters.min_pct}%.`); } catch (error) { renderKpis([]); renderSeriesChart([]); renderRows([]); setMessage(`Could not load dashboard data: ${error.message}`, true); } }
+    function renderSeriesChart(rows) { const totals = rows.reduce((acc, row) => { const series = row.series || "Unknown"; acc[series] = (acc[series] || 0) + Math.abs(Number(row.pct_change_vs_previous_snapshot || 0)); return acc; }, {}); const entries = Object.entries(totals).sort((a, b) => b[1] - a[1]).slice(0, 8); const max = entries.reduce((acc, [, value]) => Math.max(acc, value), 0) || 1; els.seriesChart.innerHTML = entries.length ? entries.map(([series, value]) => `<div class="bar-row"><span class="bar-label" title="${escapeHtml(series)}">${escapeHtml(series)}</span><span class="bar-track"><span class="bar" style="width:${Math.max(4, (value / max) * 100)}%"></span></span><strong>${value.toFixed(1)}%</strong></div>`).join("") : "<p class=\"message\">No series data returned for these filters.</p>"; }
+    function renderTopCards(rows) { const top = sortedRows(rows).slice(0, 3); els.topCards.innerHTML = top.length ? top.map((row) => `<article class="alert-card"><strong>${escapeHtml(row.product_name || "-")}</strong><div class="meta"><span>${escapeHtml(row.series || "-")}</span><span class="priority">P${escapeHtml(row.priority || "-")}</span></div><div class="big-change">${Number(row.pct_change_vs_previous_snapshot || 0).toFixed(2)}%</div><a href="${escapeHtml(row.source_url || "#")}" target="_blank" rel="noreferrer">Open product</a></article>`).join("") : "<p class=\"message\">No alerts found.</p>"; }
+    function renderRows(rows) { els.alertRows.innerHTML = rows.map((row) => `<tr><td><strong>${escapeHtml(row.product_name || "-")}</strong><span>${escapeHtml(row.product_code || "")}</span></td><td>${escapeHtml(row.series || "-")}</td><td>${escapeHtml(row.snapshot_date || "-")}</td><td>${currency.format(Number(row.previous_mrp || 0))}</td><td>${currency.format(Number(row.mrp || 0))}</td><td class="change">${Number(row.pct_change_vs_previous_snapshot || 0).toFixed(2)}%</td><td><span class="priority">${escapeHtml(row.priority || "-")}</span></td><td><a href="${escapeHtml(row.source_url || "#")}" target="_blank" rel="noreferrer">Open</a></td></tr>`).join(""); }
+    async function load() { setMessage("Loading latest alerts from API Gateway..."); try { const response = await fetch(buildUrl()); if (!response.ok) throw new Error(`API returned HTTP ${response.status}`); const payload = await response.json(); const rows = sortedRows(payload.results || []); renderKpis(rows); renderSeriesChart(rows); renderTopCards(rows); renderRows(rows); setMessage(`Loaded ${rows.length} alerts. Filters: ${payload.filters.days} days, limit ${payload.filters.limit}, min ${payload.filters.min_pct}%.`); } catch (error) { renderKpis([]); renderSeriesChart([]); renderTopCards([]); renderRows([]); setMessage(`Could not load dashboard data: ${error.message}`, true); } }
     els.filters.addEventListener("submit", (event) => { event.preventDefault(); load(); });
     load();
   </script>

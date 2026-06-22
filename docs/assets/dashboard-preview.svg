@@ -1,6 +1,6 @@
 ﻿<svg width="1200" height="610" viewBox="0 0 1200 610" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">Jaquar Price Pulse dashboard preview</title>
-  <desc id="desc">A dashboard preview showing API status, KPIs, series movement bars, and price alert rows.</desc>
+  <desc id="desc">A dashboard preview showing pipeline status, KPIs, series movement bars, highest alerts, and price alert rows.</desc>
   <defs>
     <linearGradient id="hero" x1="0" x2="1" y1="0" y2="1">
       <stop offset="0" stop-color="#F7FBFC"/>
@@ -48,7 +48,7 @@
   <rect x="228" y="479" width="122" height="12" rx="6" fill="#B45309"/>
   <text x="420" y="491" fill="#1D2433" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="800">5.8%</text>
   <rect x="494" y="336" width="636" height="194" rx="12" fill="#FFFFFF" stroke="#DDE3EE"/>
-  <text x="518" y="373" fill="#1D2433" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" font-weight="800">Latest Price Alerts</text>
+  <text x="518" y="373" fill="#1D2433" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" font-weight="800">Highest Alerts</text>
   <rect x="518" y="395" width="588" height="34" rx="8" fill="#FBFCFE"/>
   <text x="536" y="416" fill="#697386" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" font-weight="800">PRODUCT</text>
   <text x="792" y="416" fill="#697386" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" font-weight="800">MRP</text>
