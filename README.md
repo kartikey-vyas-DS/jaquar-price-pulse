@@ -1,6 +1,8 @@
 ﻿# Jaquar Price Pulse
 
-Serverless data engineering project for tracking historical Jaquar faucet prices from a curated watchlist, modeling price movements, and exposing alert-ready changes through a REST API and dashboard.
+Jaquar products are sold across dozens of regional distributors. Prices shift weekly with no centralised visibility; a procurement team checking 50 SKUs manually takes hours. This pipeline automates that workflow with scheduled snapshots, automatic change detection, and an alert API that flags what moved and by how much.
+
+Serverless data engineering project for tracking Jaquar faucet prices from a curated watchlist, modeling price movements, and exposing alert-ready changes through a REST API and dashboard.
 
 <p align="center">
   <img src="docs/assets/dashboard-preview.svg" alt="Jaquar Price Pulse dashboard preview" width="100%">
@@ -8,8 +10,8 @@ Serverless data engineering project for tracking historical Jaquar faucet prices
 
 ## Capabilities
 
-- Python extraction from a real product source
-- S3 raw/seed landing
+- Live Jaquar product extraction using CSRF-aware variant API calls
+- S3 raw snapshot and seed landing
 - RDS PostgreSQL storage
 - dbt transformation models and data quality tests
 - SQL window functions for price-change history
@@ -29,7 +31,7 @@ The endpoint returns price-change alerts from the PostgreSQL mart table. Query p
 - `limit`: max records to return, default `50`, max `200`
 - `min_pct`: minimum absolute percentage movement, default `0`
 
-## Current Local/RDS Flow
+## Local/RDS Bootstrap Flow
 
 1. Load a 50-SKU watchlist from `data/jaquar_price_watchlist_50.csv`.
 2. Load weekly synthetic seed history from `data/jaquar_price_history_seed_synthetic.csv`.
@@ -40,20 +42,18 @@ The endpoint returns price-change alerts from the PostgreSQL mart table. Query p
    - `price_history`
    - `price_change_alerts`
 
-The synthetic history is clearly marked with `is_synthetic = true`. It exists to demonstrate time-series transformations before enough real scheduled snapshots accumulate.
+The synthetic history is clearly marked with `is_synthetic = true`. It bootstraps the time-series model until scheduled live snapshots accumulate.
 
-## Current AWS Flow
+## AWS Flow
 
-The deployed AWS pipeline currently runs from the uploaded S3 seed files. It does not yet scrape Jaquar live on each schedule.
+The production flow is designed to append live Jaquar snapshots instead of repeatedly reloading the same seed file. The seed loader remains as a bootstrap/backfill utility.
 
 1. EventBridge Scheduler runs daily.
 2. Step Functions starts `jpp-price-pipeline`.
-3. `jpp-load-seed` loads the watchlist and seeded history from S3 into RDS.
+3. `jpp-scrape-jaquar-prices` reads the active watchlist from S3, calls Jaquar product pages and the internal variant endpoint, writes a dated raw CSV to S3, and upserts `is_synthetic = false` rows into `raw.price_snapshots`.
 4. `jpp-transform-prices` rebuilds staging views and mart tables in PostgreSQL.
 5. API Gateway serves `mart.price_change_alerts` through `jpp-price-changes-api`.
 6. `dashboard/index.html` fetches the API and visualizes the latest alert set.
-
-The next production-style upgrade is adding a `jpp-scrape-jaquar` Lambda before the load/transform steps so scheduled runs append real snapshots instead of reloading seeded history.
 
 ## Local Setup
 
@@ -110,6 +110,14 @@ Open the local dashboard:
 dashboard/index.html
 ```
 
+Package the live scrape Lambda:
+
+```powershell
+.\scripts\package_scrape_jaquar_lambda.ps1 -Python .\.venv\Scripts\python.exe
+```
+
+Deployment notes: [`docs/deploy-live-scrape.md`](docs/deploy-live-scrape.md)
+
 ## Tables
 
 `raw.watchlist`
@@ -137,9 +145,10 @@ Filters `price_history` to rows where movement exceeds the SKU-specific threshol
 ```mermaid
 flowchart LR
   A["EventBridge Scheduler: daily"] --> B["Step Functions: jpp-price-pipeline"]
-  B --> C["Lambda: jpp-load-seed"]
-  D["S3: watchlist + seeded history CSVs"] --> C
-  C --> E["RDS PostgreSQL: raw schema"]
+  B --> C["Lambda: jpp-scrape-jaquar-prices"]
+  D["S3: watchlist CSV"] --> C
+  C --> N["S3: dated raw snapshot"]
+  C --> E["RDS PostgreSQL: raw.price_snapshots"]
   B --> F["Lambda: jpp-transform-prices"]
   E --> F
   F --> G["staging views"]
@@ -160,4 +169,10 @@ flowchart LR
 - S3 Gateway VPC endpoint avoids NAT Gateway cost for S3 access from VPC Lambdas.
 - No NAT Gateway, no RDS Proxy, no paid dashboards.
 - EventBridge Scheduler triggers one low-volume Step Functions workflow per day.
+
+## What I'd Do Differently At Scale
+
+- Move from public RDS access to private subnets plus RDS Proxy once Lambda concurrency increases.
+- Replace synthetic seed history with a formal backfill strategy built from historical raw snapshots.
+- Add dbt source freshness tests so pipeline failures are caught before stale or incomplete data reaches the mart.
 
