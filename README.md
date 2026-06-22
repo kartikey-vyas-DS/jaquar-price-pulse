@@ -116,7 +116,6 @@ Package the live scrape Lambda:
 .\scripts\package_scrape_jaquar_lambda.ps1 -Python .\.venv\Scripts\python.exe
 ```
 
-Deployment notes: [`docs/deploy-live-scrape.md`](docs/deploy-live-scrape.md)
 
 ## Tables
 
