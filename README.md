@@ -19,6 +19,12 @@ Jaquar Price Pulse is a serverless data engineering project for tracking faucet 
 - AWS architecture using Lambda, Step Functions, EventBridge Scheduler, S3, RDS PostgreSQL, API Gateway, and CloudWatch
 - Lightweight dashboard that consumes the live API endpoint
 
+## Live Dashboard
+
+```text
+https://kartikey-vyas-ds.github.io/jaquar-price-pulse/dashboard/
+```
+
 ## Live Demo API
 
 ```text
